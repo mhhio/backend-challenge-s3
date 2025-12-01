@@ -137,8 +137,8 @@ curl http://localhost:8000/sessions/user-123/events
 │   │   └── sessions/[id]/page.tsx      # Event detail page
 │   └── package.json
 ├── infra/
-│   └── docker-compose.yml  # MinIO setup
-└── PLAN.md                 # Implementation plan
+    └── docker-compose.yml  # MinIO setup
+
 ```
 
 ## Versions
