@@ -1,0 +1,27 @@
+services:
+  minio:
+    image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  createbuckets:
+    image: minio/mc:RELEASE.2024-11-05T11-29-45Z
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb --ignore-existing myminio/app-events;
+      /usr/bin/mc anonymous set public myminio/app-events;
+      exit 0;
+      "
+
+volumes:
+  minio_data:
